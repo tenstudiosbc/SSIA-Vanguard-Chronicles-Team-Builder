@@ -130,6 +130,8 @@ const ELEMENTS = {
   Electro:{emoji:"⚡", color:"#ffd27a"},
   Geo:{emoji:"🪨", color:"#d7b98a"},
   Aero:{emoji:"💨", color:"#b3ecff"},
+  Spectro:{emoji:"✨️", color:"#FEEB08"},
+  Void:{emoji:"🟣", color:"#490147"},
 };
 
 const COUNTERS = {
@@ -139,7 +141,9 @@ const COUNTERS = {
   Hydro:["Pyro"],
   Electro:["Hydro"],
   Geo:[],       // neutral / stabilizer
-  Aero:[]       // disrupt / utility
+  Aero:[],       // disrupt / utility
+  Spectro:[],
+  Void:["Spectro"],
 };
 
 const roster = [
@@ -151,6 +155,7 @@ const roster = [
   {id:"lucia", name:"Lucia Hoenigsman", element:"Aero", roles:["DPS","Polearm","Leader"], util:["Mobility","Buff Uplift"], note:"Charming, determined", power:4},
   {id:"margaret", name:"Margaret Stephanie", element:"Cryo", roles:["Support","Polearm"], util:["Resolve","Conflict Cure"], note:"Wise counselor", power:4},
   {id:"ayaka", name:"Kirisame Ayaka", element:"Electro", roles:["DPS","Katana","Leader"], util:["Discipline","Precision"], note:"SIRA SAC from Shinkyou", power:5},
+  {id:"elaria", name:"Princess Elaria Solenyra", element:"Spectro", roles:["DPS","Support"], util:["Tsundere","Regal"], note:"she is the “Eternal Bloom of Sa’Lume”, blessed by mystical waters hidden deep in the desert.", power:5},
 ];
 
 /* -------------------- UI Rendering -------------------- */
