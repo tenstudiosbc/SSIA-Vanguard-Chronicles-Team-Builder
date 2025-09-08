@@ -1,396 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="an official team Builder from TSBC Games, Use it well">
-<title>SSIA: Vanguard Chronicles — Team Builder</title>
-<style>
-  :root{
-    --bg:#0b0f14;--panel:#121821;--muted:#7e8ba3;--text:#e8eefc;--accent:#8fd3ff;--good:#8df0b2;--warn:#ffd27a;--bad:#ff9898;
-    --chip:#1a2330;--chip2:#0f141c;--ring:#263142;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{
-    margin:0;background:linear-gradient(180deg,#0b0f14,#0d121a 40%,#0b0f14);
-    color:var(--text);font:16px/1.4 system-ui,Segoe UI,Roboto,Inter,Arial,sans-serif;
-  }
-  header{
-    padding:18px 16px;border-bottom:1px solid var(--ring);position:sticky;top:0;background:rgba(10,14,20,.85);backdrop-filter: blur(8px);
-  }
-  .title{font-weight:800;letter-spacing:.3px;font-size:clamp(18px,3vw,22px)}
-  .subtitle{color:var(--muted);font-size:.95rem}
-  .container{padding:16px;max-width:1200px;margin:0 auto;display:grid;gap:16px;grid-template-columns:1fr}
-  @media (min-width: 980px){
-    .container{grid-template-columns: 1.15fr .85fr}
-  }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  /* Roster */
-  .panel{background:var(--panel);border:1px solid var(--ring);border-radius:16px;box-shadow:0 6px 24px rgba(0,0,0,.35)}
-  .panel h2{margin:0;padding:14px 16px;border-bottom:1px solid var(--ring);font-size:1.05rem}
-  .toolbar{display:flex;gap:10px;flex-wrap:wrap;padding:12px 12px 0}
-  .search{flex:1;display:flex;align-items:center;background:var(--chip2);border:1px solid var(--ring);border-radius:12px;padding:8px 10px}
-  .search input{flex:1;background:transparent;border:0;outline:none;color:var(--text)}
-  .filters{display:flex;gap:8px;flex-wrap:wrap;padding:10px 12px 12px}
-  .chip{padding:6px 10px;border-radius:999px;background:var(--chip);border:1px solid var(--ring);cursor:pointer;user-select:none}
-  .chip[aria-pressed="true"]{outline:2px solid var(--accent);background:#163047}
-  .roster{display:grid;gap:10px;padding:12px;grid-template-columns:repeat(auto-fill,minmax(220px,1fr))}
-  .card{
-    border:1px solid var(--ring);background:linear-gradient(180deg,#111826,#0e141d 65%,#0c121a);
-    border-radius:16px;padding:12px;display:grid;gap:8px;transition:transform .2s ease, box-shadow .2s ease;
-  }
-  .card:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.35)}
-  .name{font-weight:700}
-  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .badge{padding:4px 8px;border-radius:999px;font-size:.78rem;border:1px solid var(--ring);background:var(--chip)}
-  .roles{gap:6px}
-  .btn{
-    background:#0f2537;border:1px solid var(--accent);color:var(--text);
-    border-radius:12px;padding:8px 10px;font-weight:700;cursor:pointer
-  }
-  .btn[disabled]{opacity:.5;cursor:not-allowed}
-  .tiny{font-size:.8rem;color:var(--muted)}
-  .note{color:var(--muted);font-size:.9rem}
+  <!-- 🔹 SEO & Social Meta -->
+  <meta name="title" content="SSIA: Vanguard Chronicles — Team Builder" />
+  <meta name="description" content="Official SSIA: Vanguard Chronicles Team Builder by TSBC Games. Build your dream squad of agents, princesses, and specialists, then evaluate elemental synergy with the Counter System." />
+  <meta name="keywords" content="SSIA Vanguard Chronicles, Team Builder, Tactical RPG, RPG Maker VX Ace, TSBC Games, Gacha, Elemental Counter System" />
+  <meta name="author" content="TSBC Games" />
 
-  /* Team */
-  .team-wrap{padding:12px;display:grid;gap:12px}
-  .slots{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
-  .slot{
-    min-height:88px;border:1px dashed var(--ring);border-radius:16px;padding:10px;background:#0c121a;
-    display:grid;place-content:center;place-items:center;text-align:center
-  }
-  .slot.filled{border-style:solid;background:linear-gradient(180deg,#0f1622,#101a28)}
-  .slot .x{justify-self:end;margin:-4px -4px 4px auto;border:0;background:transparent;color:var(--muted);cursor:pointer}
-  .slot .member{display:grid;gap:6px}
-  .meter{height:12px;border-radius:999px;background:#0e1520;border:1px solid var(--ring);overflow:hidden}
-  .meter>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ff9e8f,#ffd27a,#8df0b2);transition:width .35s ease}
-  .score-big{font-size:2.2rem;font-weight:800}
-  .breakdown{display:grid;gap:8px;padding:8px 0}
-  .line{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed #1e2a3b;padding:6px 0}
-  .good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
-  .list{display:flex;flex-wrap:wrap;gap:6px}
-  .kbd{border:1px solid var(--ring);border-bottom-width:2px;padding:2px 6px;border-radius:8px;background:#0c141f}
+  <meta property="og:title" content="SSIA: Vanguard Chronicles — Team Builder" />
+  <meta property="og:description" content="Pick up to 4 members and test your team synergy in this tactical RPG-inspired team builder." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="preview.png" />
+  <meta property="og:url" content="https://your-site-link.com" />
 
-  footer{padding:12px 16px;color:var(--muted);text-align:center}
-  a.link{color:var(--accent);text-decoration:none}
-</style>
+  <title>SSIA: Vanguard Chronicles — Team Builder</title>
+
+  <!-- Genshin-style font -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #1a1a28;
+      --panel: rgba(25,25,38,0.85);
+      --text: #fefdf8;
+      --muted: #c6c3b4;
+      --accent: #f9d56e;
+      --ring: #d4b26e;
+      --chip: #2a2a3f;
+      --good: #8df0b2;
+      --warn: #ffd27a;
+      --bad: #ff9898;
+    }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin:0; }
+    body {
+      font-family: "Cinzel", serif;
+      background: url("genshin-style-bg.jpg") no-repeat center center fixed, #1a1a28;
+      background-size: cover;
+      color: var(--text);
+      font-size: 16px;
+    }
+    header {
+      text-align: center;
+      padding: 20px;
+      background: linear-gradient(90deg, rgba(40,30,10,0.9), rgba(20,20,15,0.9));
+      border-bottom: 2px solid var(--ring);
+    }
+    .title { font-weight: 800; font-size: 1.8rem; color: var(--accent); }
+    .subtitle { font-size: 1rem; color: var(--muted); }
+    .container { padding: 16px; max-width: 1200px; margin: 0 auto;
+      display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 980px) { .container { grid-template-columns: 1.2fr 0.8fr; } }
+
+    /* Panels */
+    .panel {
+      background: var(--panel); border: 2px solid var(--ring); border-radius: 20px;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.4);
+    }
+    .panel h2 {
+      margin: 0; padding: 14px 16px; border-bottom: 1px solid var(--ring);
+      font-size: 1.2rem; color: var(--accent);
+    }
+
+    /* Roster */
+    .roster { display: grid; gap: 10px; padding: 12px;
+              grid-template-columns: repeat(auto-fill,minmax(220px,1fr)); }
+    .card {
+      border: 2px solid var(--ring);
+      background: linear-gradient(180deg,rgba(50,50,70,0.9),rgba(20,20,30,0.95));
+      border-radius: 20px;
+      padding: 12px;
+      display: grid; gap: 8px;
+      transition: transform .2s, box-shadow .2s;
+    }
+    .card:hover { transform: scale(1.05); box-shadow: 0 12px 28px rgba(0,0,0,0.55); }
+    .name { font-weight: 700; color: var(--accent); }
+    .row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge {
+      padding: 4px 8px; border-radius: 999px;
+      font-size: .78rem; border: 1px solid var(--ring);
+      background: rgba(255,255,255,0.05);
+    }
+    .badge.star { color: #ffd369; font-weight: 700; font-size: 1rem; }
+    .btn {
+      background: rgba(249,213,110,0.15);
+      border: 1px solid var(--accent); color: var(--accent);
+      border-radius: 12px; padding: 8px 10px;
+      font-weight: 700; cursor: pointer;
+    }
+
+    /* Portraits */
+    .portrait {
+      width: 100%; border-radius: 12px; margin-bottom: 8px;
+    }
+    .bio {
+      font-size: 0.8rem; color: var(--muted);
+      border-top: 1px dashed var(--ring); padding-top: 6px;
+    }
+
+    /* Search */
+    .search-box {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--ring);
+      background: rgba(20,20,25,0.5);
+    }
+    .search-box input {
+      width: 100%; padding: 10px;
+      border-radius: 12px; border: 1px solid var(--ring);
+      background: rgba(30,30,40,0.9);
+      color: var(--text); font-size: 1rem;
+    }
+
+    /* Team slots */
+    .team-wrap { padding: 12px; display: grid; gap: 12px; }
+    .slots { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit,minmax(180px,1fr)); }
+    .slot {
+      min-height: 100px; border: 2px dashed var(--ring);
+      border-radius: 16px; padding: 10px;
+      background: rgba(15,15,25,0.8); display: grid;
+      place-content: center; text-align: center;
+    }
+    .slot.filled { border-style: solid; background: rgba(30,30,45,0.9); }
+    .slot .x { justify-self:end; background: none; border:0; color: var(--muted); cursor: pointer; }
+
+    /* Synergy meter */
+    .meter { height: 14px; border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--ring); overflow: hidden; }
+    .meter>i {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg,#ff9e8f,#ffd27a,#8df0b2);
+      transition: width .35s ease;
+    }
+    .score-big { font-size: 2rem; font-weight: 800; color: var(--accent); }
+
+    .line { border-bottom: 1px dashed #444; padding: 6px 0; }
+    .good{color:var(--good)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+    footer { text-align: center; padding: 20px; color: var(--muted); }
+  </style>
 </head>
 <body>
 <header>
   <div class="title">SSIA: Vanguard Chronicles — Team Builder</div>
-  <div class="subtitle">Pick up to 4 agents. See Elemental Coverage, Utilities, and an automatic Synergy Score.</div>
+  <div class="subtitle">Build your squad of 4 heroes and evaluate elemental synergy</div>
 </header>
 
 <main class="container">
   <!-- Roster -->
-  <section class="panel" aria-labelledby="rosterTitle">
-    <h2 id="rosterTitle">Roster</h2>
-    <div class="toolbar">
-      <label class="search" aria-label="Search">
-        🔎&nbsp;<input id="q" type="search" placeholder="Search name, role, element, note…" />
-      </label>
+  <section class="panel">
+    <h2>Roster</h2>
+    <div class="search-box">
+      <input type="text" id="search" placeholder="Search characters by name or element...">
     </div>
-    <div class="filters" id="filters"></div>
-    <div class="roster" id="roster" aria-live="polite"></div>
+    <div class="roster" id="roster"></div>
   </section>
 
   <!-- Team / Analysis -->
-  <section class="panel" aria-labelledby="teamTitle">
-    <h2 id="teamTitle">Team (4 slots)</h2>
+  <section class="panel">
+    <h2>Team (4 slots)</h2>
     <div class="team-wrap">
       <div class="slots" id="slots"></div>
-
       <div>
         <div class="row" style="justify-content:space-between;align-items:end">
           <div>
-            <div class="tiny">Synergy Score</div>
+            <div>Synergy Score</div>
             <div class="score-big" id="score">0</div>
           </div>
           <div style="flex:1">
-            <div class="meter" aria-label="Synergy meter"><i id="meterFill"></i></div>
+            <div class="meter"><i id="meterFill"></i></div>
           </div>
         </div>
-
-        <div class="breakdown" id="breakdown"></div>
+        <div id="breakdown"></div>
       </div>
     </div>
   </section>
 </main>
 
 <footer>
-  Tips: Click a card to <span class="kbd">Add</span>. Click a slotted member’s ✖ to remove. Filters stack.
-  Share this Website, So your friends and yourself can build a strong team
+  Click a card to <span class="badge">Add</span>. Remove with ✖.
 </footer>
+
+<!-- 🔹 Hook external profile.js -->
 <script src="profile.js"></script>
-<script src="main.js"></script>
+
 <script>
-/* -------------------- Data -------------------- */
+/* Elements + Counters */
 const ELEMENTS = {
-  Pyro:{emoji:"🔥", color:"#ff8f8f"},
-  Hydro:{emoji:"💧", color:"#8fbeff"},
-  Cryo:{emoji:"❄️", color:"#9fe6ff"},
-  Electro:{emoji:"⚡", color:"#ffd27a"},
-  Geo:{emoji:"🪨", color:"#d7b98a"},
-  Aero:{emoji:"💨", color:"#b3ecff"},
-  Spectro:{emoji:"✨️", color:"#FEEB08"},
-  Void:{emoji:"🟣", color:"#490147"},
+  Pyro:{emoji:"🔥"}, Hydro:{emoji:"💧"}, Cryo:{emoji:"❄️"},
+  Electro:{emoji:"⚡"}, Geo:{emoji:"🪨"}, Aero:{emoji:"💨"},
+  Spectro:{emoji:"🌌"}, Void:{emoji:"🟣"}
 };
-
 const COUNTERS = {
-  // "A counters B"
-  Pyro:["Cryo"],
-  Cryo:["Hydro"],
-  Hydro:["Pyro"],
-  Electro:["Hydro"],
-  Geo:[],       // neutral / stabilizer
-  Aero:[],       // disrupt / utility
-  Spectro:[],
-  Void:["Spectro"]
+  Pyro:["Cryo"], Cryo:["Hydro"], Hydro:["Pyro"],
+  Electro:["Hydro"], Geo:[], Aero:[],
+  Spectro:[], Void:["Spectro"]
 };
 
+/* Roster */
 const roster = [
-  {id:"jones", name:"Jones Harrison", element:"Pyro", roles:["DPS","Leader","Ranged"], util:["High CRI","Magic Access", "1.0.0"], note:"SAC of SSIA", power:5},
-  {id:"kenziet", name:"Kenziet Felicia-Harrison", element:"Electro", roles:["DPS","Katana"], util:["Paralysis","TP Preserve","Gun Proficiency","1.1.0"], note:"Temptress & skilled SSA", power:5},
-  {id:"hannabi", name:"Hannabi Ingrid Stephanie", element:"Hydro", roles:["Support","Sword"], util:["Preemptive","HP Regen","Light Armour","1.0.0"], note:"Timid but warm support", power:5},
-  {id:"fritz", name:"Fritz Viermitz", element:"Cryo", roles:["DPS","Ranged"], util:["High CRI","Drop Bonus"], note:"Strategic profiler", power:5},
-  {id:"nexon", name:"Nexon Martinez", element:"Geo", roles:["Bruiser","Frontline"], util:["High HIT","Physical Focus"], note:"Comical agent", power:4},
-  {id:"lucia", name:"Lucia Hoenigsman", element:"Aero", roles:["DPS","Polearm","Leader"], util:["Mobility","Buff Uplift"], note:"Charming, determined", power:4},
-  {id:"margaret", name:"Margaret Stephanie", element:"Cryo", roles:["Support","Polearm"], util:["Resolve","Conflict Cure"], note:"Wise counselor", power:4},
-  {id:"ayaka", name:"Kirisame Ayaka", element:"Electro", roles:["DPS","Katana","Leader"], util:["Discipline","Precision","1.3.0"], note:"SIRA SAC from Shinkyou", power:5},
-  {id:"elaria", name:"Princess Elaria Solenyra", element:"Spectro", roles:["DPS","Support"], util:["Tsundere","Regal"], note:"she is the “Eternal Bloom of Sa’Lume”, blessed by mystical waters hidden deep in the desert.", power:5},
+  {id:"jones", name:"Jones Harrison", element:"Pyro", roles:["DPS"], power:5},
+  {id:"kenziet", name:"Kenziet Felicia-Harrison", element:"Electro", roles:["DPS"], power:5},
+  {id:"hannabi", name:"Hannabi Ingrid", element:"Hydro", roles:["Support"], power:5},
+  {id:"fritz", name:"Fritz Viermitz", element:"Cryo", roles:["DPS"], power:5},
+  {id:"nexon", name:"Nexon Martinez", element:"Geo", roles:["Frontline"], power:4},
+  {id:"lucia", name:"Lucia Hoenigsman", element:"Aero", roles:["DPS"], power:4},
+  {id:"margaret", name:"Margaret Stephanie", element:"Cryo", roles:["Support"], power:4},
+  {id:"ayaka", name:"Kirisame Ayaka", element:"Electro", roles:["DPS"], power:5},
+  {id:"elaria", name:"Princess Elaria Solenyra", element:"Spectro", roles:["DPS","Support"], power:5},
+  {id:"silverstein", name:"Silverstein Cronin", element:"Cryo", roles:["DPS"], power:5}
 ];
 
-/* -------------------- UI Rendering -------------------- */
-const rosterEl = document.getElementById("roster");
-const filtersEl = document.getElementById("filters");
-const qEl = document.getElementById("q");
-const slotsEl = document.getElementById("slots");
-const scoreEl = document.getElementById("score");
-const meterFillEl = document.getElementById("meterFill");
-const breakdownEl = document.getElementById("breakdown");
-const ELEMENT_ORDER = Object.keys(ELEMENTS);
+const rosterEl=document.getElementById("roster"), slotsEl=document.getElementById("slots"),
+scoreEl=document.getElementById("score"), meterFillEl=document.getElementById("meterFill"),
+breakdownEl=document.getElementById("breakdown"), searchEl=document.getElementById("search");
+const team=[null,null,null,null];
 
-// Create 4 empty slots
-const team = [null,null,null,null];
-
-function slotTemplate(idx, member){
-  const el = document.createElement("div");
-  el.className = "slot" + (member ? " filled" : "");
-  el.setAttribute("data-idx", idx);
-  if(!member){
-    el.innerHTML = `<div class="tiny">Empty Slot ${idx+1}</div><div class="badge">Drop or Click “Add”</div>`;
-  }else{
-    const e = ELEMENTS[member.element];
-    el.innerHTML = `
-      <button class="x" title="Remove" aria-label="Remove">✖</button>
-      <div class="member">
-        <div class="row" style="justify-content:center;gap:8px">
-          <span class="badge" style="border-color:${e.color}">${e.emoji}&nbsp;${member.element}</span>
-          <span class="badge">${member.power}★</span>
-        </div>
-        <div style="font-weight:700">${member.name}</div>
-        <div class="list">${member.roles.map(r=>`<span class="badge">${r}</span>`).join("")}</div>
-      </div>`;
-    el.querySelector(".x").addEventListener("click", ()=>{
-      const i = team.findIndex(t=>t && t.id===member.id);
-      if(i>-1){ team[i]=null; renderTeam(); }
-    });
-  }
-  // Drag target
-  el.addEventListener("dragover", e=>{e.preventDefault(); el.style.outline="2px solid #8fd3ff"});
-  el.addEventListener("dragleave", ()=> el.style.outline="");
-  el.addEventListener("drop", e=>{
-    e.preventDefault(); el.style.outline="";
-    const id = e.dataTransfer.getData("text/agent");
-    addToTeam(id, idx);
-  });
-  return el;
-}
-
-function renderTeam(){
-  slotsEl.innerHTML="";
-  team.forEach((m,i)=> slotsEl.appendChild(slotTemplate(i,m)));
-  analyzeTeam();
-}
-
+/* Render roster */
 function cardTemplate(agent){
-  const e = ELEMENTS[agent.element];
-  const card = document.createElement("article");
-  card.className="card";
-  card.draggable=true;
-  card.setAttribute("aria-label", `${agent.name} card`);
-  card.innerHTML = `
+  const e=ELEMENTS[agent.element]; const div=document.createElement("div");
+  div.className="card";
+
+  // 🔹 Check if profile.js has this agent
+  const portrait = (window.profiles && profiles[agent.id] && profiles[agent.id].portrait)
+    ? `<img src="${profiles[agent.id].portrait}" alt="${agent.name}" class="portrait">`
+    : "";
+  const bio = (window.profiles && profiles[agent.id] && profiles[agent.id].bio)
+    ? `<div class="bio">${profiles[agent.id].bio}</div>`
+    : "";
+
+  div.innerHTML=`
+    ${portrait}
     <div class="row" style="justify-content:space-between">
       <div class="name">${agent.name}</div>
-      <div class="badge" style="border-color:${e.color}">${e.emoji} ${agent.element}</div>
+      <div class="badge">${e.emoji} ${agent.element}</div>
     </div>
-    <div class="row roles">${agent.roles.map(r=>`<span class="badge">${r}</span>`).join("")}</div>
-    <div class="row">
-      ${agent.util.map(u=>`<span class="badge tiny">${u}</span>`).join("")}
-      <span class="badge">${agent.power}★</span>
-    </div>
-    <div class="note">${agent.note}</div>
-    <button class="btn add">Add to Team</button>
+    <div class="row">${agent.roles.map(r=>`<span class="badge">${r}</span>`).join("")}</div>
+    <div class="badge star">${"★".repeat(agent.power)}</div>
+    <button class="btn">Add to Team</button>
+    ${bio}
   `;
-  card.querySelector(".add").addEventListener("click", ()=> addToTeam(agent.id));
-  card.addEventListener("dragstart", e=>{
-    e.dataTransfer.setData("text/agent", agent.id);
-    e.dataTransfer.effectAllowed="copy";
-  });
-  return card;
+  div.querySelector(".btn").onclick=()=>addToTeam(agent.id);
+  return div;
 }
-
-function renderRoster(){
-  const activeFilters = [...filtersEl.querySelectorAll('[aria-pressed="true"]')]
-    .map(b => b.dataset.key);
-  const q = qEl.value.trim().toLowerCase();
-  const show = roster.filter(a=>{
-    const matchesQ = !q || `${a.name} ${a.element} ${a.roles.join(" ")} ${a.util.join(" ")} ${a.note}`.toLowerCase().includes(q);
-    const matchesF = activeFilters.every(k=>{
-      if(ELEMENT_ORDER.includes(k)) return a.element===k;
-      if(k==="role:DPS") return a.roles.includes("DPS");
-      if(k==="role:Support") return a.roles.includes("Support");
-      if(k==="hasUtility") return a.util.length>0;
-      return true;
-    });
-    return matchesQ && matchesF;
-  });
-
+function renderRoster(filter=""){
   rosterEl.innerHTML="";
-  show.forEach(a=> rosterEl.appendChild(cardTemplate(a)));
+  roster
+    .filter(a=>a.name.toLowerCase().includes(filter)||a.element.toLowerCase().includes(filter))
+    .forEach(a=>rosterEl.appendChild(cardTemplate(a)));
 }
 
-function renderFilters(){
-  const frag = document.createDocumentFragment();
-  // Element chips
-  ELEMENT_ORDER.forEach(el=>{
-    frag.appendChild(makeChip(el, el));
-  });
-  // Role chips
-  frag.appendChild(makeChip("DPS","role:DPS"));
-  frag.appendChild(makeChip("Support","role:Support"));
-  frag.appendChild(makeChip("Utility","hasUtility"));
-
-  filtersEl.innerHTML="";
-  filtersEl.appendChild(frag);
-
-  function makeChip(label, key){
-    const b = document.createElement("button");
-    b.className="chip"; b.innerText = label; b.dataset.key = key; b.type="button";
-    b.setAttribute("aria-pressed","false");
-    b.addEventListener("click",()=>{
-      b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true" ? "false":"true");
-      renderRoster();
-    });
-    return b;
+/* Slots */
+function slotTemplate(idx,member){
+  const el=document.createElement("div");
+  el.className="slot"+(member?" filled":"");
+  if(!member){ el.innerHTML=`<div>Empty Slot ${idx+1}</div>`; }
+  else{
+    el.innerHTML=`<button class="x">✖</button>
+      <div>${ELEMENTS[member.element].emoji} ${member.element} <span class="badge star">${"★".repeat(member.power)}</span></div>
+      <div>${member.name}</div>`;
+    el.querySelector(".x").onclick=()=>{team[idx]=null;renderTeam()};
   }
+  return el;
+}
+function renderTeam(){ slotsEl.innerHTML=""; team.forEach((m,i)=>slotsEl.appendChild(slotTemplate(i,m))); analyzeTeam(); }
+
+/* Add logic */
+function addToTeam(id){ const a=roster.find(x=>x.id===id);
+  if(team.some(m=>m&&m.id===id))return alert("Already in team");
+  const slot=team.findIndex(m=>!m); if(slot==-1)return alert("Team full");
+  team[slot]=a; renderTeam();
 }
 
-/* -------------------- Team Logic -------------------- */
-function addToTeam(id, preferredSlot=null){
-  const agent = roster.find(a=>a.id===id);
-  if(!agent) return;
-
-  // Prevent duplicates
-  if(team.some(m=>m && m.id===id)) return alert("That agent is already in the team.");
-
-  // Find slot
-  let slot = preferredSlot ?? team.findIndex(m=>m===null);
-  if(slot===-1) return alert("Team is full (4/4). Remove someone to add a new agent.");
-  team[slot]=agent;
-  renderTeam();
-}
-
+/* Analysis */
 function analyzeTeam(){
-  const members = team.filter(Boolean);
-  const uniqueElements = [...new Set(members.map(m=>m.element))];
+  const members=team.filter(Boolean);
+  const unique=[...new Set(members.map(m=>m.element))];
+  let score=unique.length*20;
+  if(members.some(m=>m.roles.includes("Support")))score+=10;
+  if(members.some(m=>m.roles.includes("DPS")))score+=10;
+  if(members.some(m=>m.roles.includes("Frontline")))score+=5;
+  score=Math.min(100,score);
+  scoreEl.textContent=score; meterFillEl.style.width=score+"%";
 
-  // Coverage & Counters
-  const counters = {};
-  uniqueElements.forEach(el=>{
-    (COUNTERS[el]||[]).forEach(target=>{
-      counters[target] = (counters[target]||0)+1;
-    });
-  });
-
-  const hasSupport = members.some(m=>m.roles.includes("Support"));
-  const hasDPS = members.some(m=>m.roles.includes("DPS"));
-  const hasFront = members.some(m=>m.roles.includes("Bruiser") || m.roles.includes("Frontline"));
-  const utilityCount = members.reduce((n,m)=> n + (m.util?.length||0), 0);
-
-  // Score rubric
-  let score = 0;
-  score += uniqueElements.length * 20;               // unique elements
-  if(hasSupport) score += 10;
-  if(hasDPS) score += 10;
-  if(hasFront) score += 5;
-  score += Math.min(utilityCount,4) * 3;             // cap utility influence
-  // duplicates penalty
-  const dupPenalty = members.length - uniqueElements.length;
-  score -= Math.max(0, dupPenalty-1) * 10;           // allow one duplicate with light penalty
-  score = Math.max(0, Math.min(100, score));
-
-  // Meter
-  scoreEl.textContent = String(score);
-  meterFillEl.style.width = score + "%";
-
-  // Breakdown UI
-  breakdownEl.innerHTML = "";
-
-  // 1) Elements present
-  const elLine = document.createElement("div");
-  elLine.className="line";
-  elLine.innerHTML = `<div>Elements</div><div class="list">${
-    uniqueElements.length ? uniqueElements.map(e=>`<span class="badge">${ELEMENTS[e].emoji} ${e}</span>`).join("") : '<span class="badge">None</span>'
-  }</div>`;
-  breakdownEl.appendChild(elLine);
-
-  // 2) Counters coverage
-  const coverage = ELEMENT_ORDER.map(e=>{
-    const n = counters[e]||0;
-    const cls = n>0 ? "good":"bad";
-    return `<span class="badge ${cls}">${ELEMENTS[e].emoji} ${e}: ${n>0?"Countered":"Uncountered"}</span>`;
-  }).join("");
-  const cLine = document.createElement("div");
-  cLine.className="line";
-  cLine.innerHTML = `<div>Counter Coverage</div><div class="list">${coverage}</div>`;
-  breakdownEl.appendChild(cLine);
-
-  // 3) Roles/Utilities
-  const ru = document.createElement("div");
-  ru.className="line";
-  ru.innerHTML = `<div>Roles & Utility</div>
-    <div class="list">
-      <span class="badge ${hasDPS?'good':'warn'}">DPS: ${hasDPS?'Yes':'Missing'}</span>
-      <span class="badge ${hasSupport?'good':'warn'}">Support: ${hasSupport?'Yes':'Missing'}</span>
-      <span class="badge ${hasFront?'good':'warn'}">Frontline: ${hasFront?'Yes':'Missing'}</span>
-      <span class="badge">Utility tags: ${utilityCount}</span>
-    </div>`;
-  breakdownEl.appendChild(ru);
-
-  // 4) Recommendations
-  const rec = document.createElement("div");
-  rec.className="line";
-  const tips = [];
-  if(!hasSupport) tips.push("Add a Support (Hannabi or Margaret).");
-  if(!hasFront) tips.push("Consider a frontline/bruiser (Nexon).");
-  if(!(uniqueElements.includes("Geo"))) tips.push("Geo adds stability and neutral coverage.");
-  if(!(uniqueElements.includes("Hydro"))) tips.push("Hydro helps counter Pyro and pairs with Electro.");
-  if(dupPenalty>1) tips.push("Too many duplicate elements reduce flexibility.");
-  if(!tips.length) tips.push("Great balance. Consider Aero (Lucia) for disruption on certain fights.");
-  rec.innerHTML = `<div>Suggestions</div><div class="list"><span class="badge">${tips.join(" ")}</span></div>`;
-  breakdownEl.appendChild(rec);
+  breakdownEl.innerHTML="";
+  breakdownEl.innerHTML+=`<div class="line"><b>Elements Present:</b> ${unique.map(e=>ELEMENTS[e].emoji+" "+e).join(", ")||"None"}</div>`;
+  const counters={};
+  unique.forEach(el=>{(COUNTERS[el]||[]).forEach(t=>{counters[t]=(counters[t]||0)+1});});
+  const all=Object.keys(ELEMENTS);
+  breakdownEl.innerHTML+=`<div class="line"><b>Elemental Counters:</b><br>`+
+    all.map(e=>`<span class="${counters[e]>0?"good":"bad"}">${ELEMENTS[e].emoji} ${e}: ${counters[e]>0?"Countered":"Uncountered"}</span>`).join(" , ")+`</div>`;
+  const tips=[];
+  if(!members.some(m=>m.roles.includes("Support")))tips.push("Add a Support (Hannabi or Margaret).");
+  if(!members.some(m=>m.roles.includes("Frontline")))tips.push("Consider a frontline (Nexon).");
+  if(!unique.includes("Geo"))tips.push("Geo adds stability.");
+  if(!unique.includes("Hydro"))tips.push("Hydro helps counter Pyro and pairs with Electro.");
+  if(!tips.length)tips.push("Great balance. You’re ready!");
+  breakdownEl.innerHTML+=`<div class="line"><b>Suggestions:</b> ${tips.join(" ")}</div>`;
 }
 
-/* -------------------- Boot -------------------- */
-function init(){
-  renderFilters();
-  renderRoster();
-  renderTeam();
-  qEl.addEventListener("input", renderRoster);
-}
-init();
+/* Search */
+searchEl.addEventListener("input",()=>renderRoster(searchEl.value.trim().toLowerCase()));
+
+/* Init */
+renderRoster(); renderTeam();
 </script>
 </body>
 </html>
